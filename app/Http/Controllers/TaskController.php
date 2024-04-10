@@ -13,7 +13,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
+        $tasks = Task::where('department_index', Auth::user()->department_index)->get();
         return view('website.components.tasks', compact('tasks'));
     }
 

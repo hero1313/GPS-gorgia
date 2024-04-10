@@ -18,10 +18,10 @@ class RecordController extends Controller
      */
     public function index()
     {
-        $records = Record::all();
-        $locations = Location::all();
-        $tasks = Task::all();
-        $users = User::all();
+        $records = Record::where('department_index', Auth::user()->department_index)->get();
+        $locations = Location::where('department_index', Auth::user()->department_index)->get();
+        $tasks = Task::where('department_index', Auth::user()->department_index)->get();
+        $users = User::where('department_index', Auth::user()->department_index)->where('role', 1)->get();
         $today = Carbon::today();
 
         return view('website.components.records', compact('records', 'locations', 'tasks', 'users', 'today'));

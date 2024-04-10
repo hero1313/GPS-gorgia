@@ -18,13 +18,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('website.components.records');
-});
 
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
     
     // Locations Routes
+    Route::get('/', [LocationController::class, 'index'])->name('locations.index');
     Route::get('/locations', [LocationController::class, 'index'])->name('locations.index');
     Route::post('/locations/store', [LocationController::class, 'store'])->name('locations.store');
     Route::put('/locations/{id}/update', [LocationController::class, 'update'])->name('locations.update');
@@ -49,6 +47,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
 
     Route::get('/users', [MainController::class, 'users'])->name('users.index');
     Route::put('/users/{id}', [MainController::class, 'usersUpdate'])->name('users.update');
+    Route::delete('/users/{id}/destroy', [MainController::class, 'usersDestroy'])->name('users.destroy');
 
     Route::get('/dashboard', [MainController::class, 'dashboard'])->name('dashboard.index');
 

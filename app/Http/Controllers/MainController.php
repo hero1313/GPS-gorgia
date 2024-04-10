@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MainController extends Controller
 {
@@ -20,7 +21,7 @@ class MainController extends Controller
      */
     public function users()
     {
-        $users = User::all();
+        $users = User::where('department_index', Auth::user()->department_index)->get();
         return view('website.components.users', compact('users'));
     }
 
@@ -29,6 +30,13 @@ class MainController extends Controller
         $user = User::find($id);
         $user->role = $request->role;
         $user->update();
+        return redirect()->back();
+    }
+
+    public function usersDestroy($id)
+    {   
+        $user = User::find($id);
+        $user->delete();
         return redirect()->back();
     }
 }

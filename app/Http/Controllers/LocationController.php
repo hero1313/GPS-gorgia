@@ -13,7 +13,7 @@ class LocationController extends Controller
      */
     public function index()
     {
-        $locations = Location::all();
+        $locations = Location::where('department_index', Auth::user()->department_index)->get();
         return view('website.components.locations', compact('locations'));
     }
 

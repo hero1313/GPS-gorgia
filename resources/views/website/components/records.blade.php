@@ -49,16 +49,24 @@
                                     <tbody>
                                         @foreach ($records as $record)
                                             <tr>
-                                                <td>{{ $record->assigned_user_id }}</td>
-                                                <td>{{ $record->task_id }}</td>
-                                                <td>{{ $record->location_id }} ქალაქი</td>
+                                                <td>{{ $record->user->name }}</td>
+                                                <td>{{ $record->task->name}}</td>
+                                                <td>{{ $record->location->name }} ქალაქი</td>
                                                 <td>{{ $record->date }}</td>
                                                 <td><button class="btn btn-primary" data-toggle="modal"
                                                     data-target="#record_detail_{{ $record->id }}">დეტალები</button>
                                                 </td>
                                                 <td><a href="{{ $record->image }}" target="_blank"><button class="btn btn-success">სურათი</button></a></td>
                                                 
-                                                <td><button class="btn btn-success">{{ $record->status }}</button></td>
+                                                <td><button class="btn btn-success">
+                                                @if($record->status == 0)
+                                                    დაგეგმილი
+                                                @elseif ($record->status == 1)
+                                                    დასრულებული
+                                                @else
+                                                    ჩაშლილი
+                                                @endif
+                                                </button></td>
                                                 <td><button class="btn btn-primary" data-toggle="modal"
                                                         data-target="#record_edit_{{ $record->id }}">რედაქტირება</button>
                                                 </td>
@@ -107,7 +115,7 @@
                                 </li>
                                 <li class="d-flex">
                                     <h5 class="mr-3">შემსრულებელი :</h5>
-                                    <p>{{ $record->assigned_user_id }}</p>
+                                    <p>{{ $record->user->name }}</p>
                                 </li>
                                 <li class="d-flex">
                                     <h5 class="mr-3">თარიღი :</h5>
@@ -140,7 +148,7 @@
                             <div class="col-12 detail-line">
                                 <li class="d-flex">
                                     <h5 class="mr-3">დავალება :</h5>
-                                    <p>{{ $record->description }}</p>
+                                    <p>{{ $record->task->name }}</p>
                                 </li>
                                 <li class="d-flex">
                                     <h5 class="mr-3">კომენტარი :</h5>
@@ -175,7 +183,7 @@
                                 <div class="form-group">
                                     <label for="inputState">შემსრულებელი</label>
                                     <select id="inputState" name="assigned_user_id" required class="form-control">
-                                        <option value="{{ $record->assigned_user_id }}">{{ $record->assigned_user_id }}
+                                        <option value="{{ $record->assigned_user_id }}">{{ $record->user->name }}
                                         </option>
                                         @foreach ($users as $user)
                                             <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -187,7 +195,7 @@
                                 <div class="form-group">
                                     <label for="inputState">დავალება</label>
                                     <select id="inputState" name="task_id" class="form-control">
-                                        <option value="{{ $record->task_id }}">{{ $record->task_id }}</option>
+                                        <option value="{{ $record->task_id }}">{{ $record->task->name }}</option>
                                         @foreach ($tasks as $task)
                                             <option value="{{ $task->id }}">{{ $task->name }}</option>
                                         @endforeach
@@ -198,7 +206,7 @@
                                 <div class="form-group">
                                     <label for="inputState">ლოკაცია</label>
                                     <select id="inputState" name="location_id" class="form-control">
-                                        <option value="{{ $record->location_id }}">{{ $record->location_id }}</option>
+                                        <option value="{{ $record->location_id }}">{{ $record->location->name }}</option>
                                         @foreach ($locations as $location)
                                             <option value="{{ $location->id }}">{{ $location->name }}</option>
                                         @endforeach
