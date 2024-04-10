@@ -11,10 +11,15 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::where('department_index', Auth::user()->department_index)->get();
-        return view('website.components.tasks', compact('tasks'));
+        $tasks = Task::where('department_index', Auth::user()->department_index);
+        if ($request->search) {
+            $tasks->where('name', 'LIKE', "%{$request->search}%");
+        }
+        $tasks = $tasks->orderBy('created_at', 'desc')->get();
+        $request = $request->all();
+        return view('website.components.tasks', compact('tasks', 'request'));
     }
 
     /**

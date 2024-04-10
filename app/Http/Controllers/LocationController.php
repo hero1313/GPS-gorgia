@@ -11,10 +11,17 @@ class LocationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $locations = Location::where('department_index', Auth::user()->department_index)->get();
-        return view('website.components.locations', compact('locations'));
+        $locations = Location::where('department_index', Auth::user()->department_index);
+        if ($request->search) {
+            $locations->where('name', 'LIKE', "%{$request->search}%")
+            ->orWhere('city', 'LIKE', "%{$request->search}%");
+        }
+        $locations = $locations->orderBy('created_at', 'desc')->get();
+        $request = $request->all();
+
+        return view('website.components.locations', compact('locations','request'));
     }
 
     /**

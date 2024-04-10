@@ -29,7 +29,7 @@
                                 <div class="mr-2 col">
                                     <div class="mb-1 text-xs font-weight-bold text-primary text-uppercase">
                                         ჩექინები (ბოლო თვე)</div>
-                                    <div class="mb-0 text-gray-800 h5 font-weight-bold">254</div>
+                                    <div class="mb-0 text-gray-800 h5 font-weight-bold">{{ $lastMonthRecords }}</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="text-gray-300 fas fa-calendar fa-2x"></i>
@@ -47,7 +47,7 @@
                                 <div class="mr-2 col">
                                     <div class="mb-1 text-xs font-weight-bold text-success text-uppercase">
                                         წარმატებული ჩექინები</div>
-                                    <div class="mb-0 text-gray-800 h5 font-weight-bold">231</div>
+                                    <div class="mb-0 text-gray-800 h5 font-weight-bold">{{ $successRecords }}</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="text-gray-300 fas fa-dollar-sign fa-2x"></i>
@@ -65,7 +65,7 @@
                                 <div class="mr-2 col">
                                     <div class="mb-1 text-xs font-weight-bold text-warning text-uppercase">
                                         ჩაშლილი ჩექინები</div>
-                                    <div class="mb-0 text-gray-800 h5 font-weight-bold">18</div>
+                                    <div class="mb-0 text-gray-800 h5 font-weight-bold">{{ $failedRecords }}</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="text-gray-300 fas fa-comments fa-2x"></i>
@@ -85,12 +85,12 @@
                                     </div>
                                     <div class="row no-gutters align-items-center">
                                         <div class="col-auto">
-                                            <div class="mb-0 mr-3 text-gray-800 h5 font-weight-bold">74%</div>
+                                            <div class="mb-0 mr-3 text-gray-800 h5 font-weight-bold">{{ $todayPercentage }}%</div>
                                         </div>
                                         <div class="col">
                                             <div class="mr-2 progress progress-sm">
                                                 <div class="progress-bar bg-info" role="progressbar"
-                                                    style="width: 74%" aria-valuenow="74" aria-valuemin="0"
+                                                    style="width: {{ $todayPercentage }}%" aria-valuenow="{{ $todayPercentage }}" aria-valuemin="0"
                                                     aria-valuemax="100"></div>
                                             </div>
                                         </div>

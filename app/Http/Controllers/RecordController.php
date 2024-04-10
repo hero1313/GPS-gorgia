@@ -16,15 +16,32 @@ class RecordController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $records = Record::where('department_index', Auth::user()->department_index)->get();
+        $records = Record::where('department_index', Auth::user()->department_index);
+        if ($request->start_date) {
+            $records->where('date', '>' ,$request->start_date);
+        }
+        if ($request->end_date) {
+            $records->where('date', '<', $request->end_date);
+        }
+        if ($request->status) {
+            $records->where('status', $request->status);
+        }
+        if ($request->assigned_user_id) {
+            $records->where('assigned_user_id', $request->assigned_user_id);
+        }
+        if ($request->location_id) {
+            $records->where('location_id', $request->location_id);
+        }
+        $records = $records->orderBy('created_at', 'desc')->get();
+        $request = $request->all();
         $locations = Location::where('department_index', Auth::user()->department_index)->get();
         $tasks = Task::where('department_index', Auth::user()->department_index)->get();
         $users = User::where('department_index', Auth::user()->department_index)->where('role', 1)->get();
         $today = Carbon::today();
 
-        return view('website.components.records', compact('records', 'locations', 'tasks', 'users', 'today'));
+        return view('website.components.records', compact('records', 'locations', 'tasks', 'users', 'today', 'request'));
     }
 
     /**
@@ -94,7 +111,7 @@ class RecordController extends Controller
 
     public function myRecords ()
     {
-        $records = Record::all();
+        $records = Record::where('assigned_user_id', Auth::user()->id)->get();
         $locations = Location::all();
         $tasks = Task::all();
         $users = User::all();

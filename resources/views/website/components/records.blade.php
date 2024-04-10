@@ -8,19 +8,52 @@
 
             @include('website.layouts.navbar')
             <div class="mb-3 container-fluid">
-                <form
-                    class="my-2 mr-auto object-form d-none d-sm-inline-block form-inline ml-md-3 my-md-0 mw-100 navbar-search">
-                    <div class="input-group">
-                        <input type="text" class="border-0 form-control bg-light small objects-search"
-                            placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button class="p-3 btn btn-primary" type="button">
-                                <i class="fas fa-search fa-sm"></i>
-                            </button>
+                <form method="get" action="{{ route('records.index') }}"
+                    class="my-2 navbar-search">
+                    <div class="row filter">
+                        <div class="col-12 col-md-2 input-group">
+                        <input type="date" name="start_date" class="border-0 form-control bg-light small objects-search"
+                            placeholder="თარიღი (დან)" value="{{ $request['start_date'] ?? '' }}">
+                        </div>
+                        <div class="col-12 col-md-2 input-group">
+                            <input type="date" name="end_date" class="border-0 form-control bg-light small objects-search"
+                                placeholder="თარიღი (მდე)" value="{{ $request['end_date'] ?? '' }}" >
+                        </div>
+                        <div class="col-12 col-md-2 input-group">
+                            <select id="inputState" name="status" class="border-0 form-control bg-light small objects-search">
+                                <option value="">სტატუსი</option>
+                                <option value="0">დაგეგმილი</option>
+                                <option value="1">დასრულებული</option>
+                                <option value="2">ჩაშლილი</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-2 input-group">
+                            <select id="inputState" name="assigned_user_id" class="border-0 form-control bg-light small objects-search">
+                                <option value=" ">შემსრულებელი</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-2 input-group">
+                            <select id="inputState" name="location_id" class="border-0 form-control bg-light small objects-search">
+                                <option value=" ">ლოკაცია</option>
+                                @foreach ($locations as $location)
+                                    <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-2 input-group">
+                            <button type="submit" class="btn btn-primary ">გაფილტვრა</button>
                         </div>
                     </div>
-                </form>
-                <button class="btn btn-primary add-btn" data-toggle="modal" data-target="#add_record">დამატება</button>
+                    
+                <div class="d-flex">
+                    <button class="btn btn-primary add-btn" type="button" data-toggle="modal" data-target="#add_record">დამატება</button>
+                    <button class="ml-4 btn btn-success add-btn" data-toggle="modal" data-target="#add_record">ექსელის ექსპორტი</button>
+                </div>
+            </form>
+
             </div>
         </div>
         <div class="mb-3 container-fluid">
@@ -51,7 +84,7 @@
                                             <tr>
                                                 <td>{{ $record->user->name }}</td>
                                                 <td>{{ $record->task->name}}</td>
-                                                <td>{{ $record->location->name }} ქალაქი</td>
+                                                <td>{{ $record->location->name }}</td>
                                                 <td>{{ $record->date }}</td>
                                                 <td><button class="btn btn-primary" data-toggle="modal"
                                                     data-target="#record_detail_{{ $record->id }}">დეტალები</button>
