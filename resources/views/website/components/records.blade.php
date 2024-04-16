@@ -86,8 +86,8 @@
                                                 <td>{{ $record->task->name}}</td>
                                                 <td>{{ $record->location->name }}</td>
                                                 <td>{{ $record->date }}</td>
-                                                <td><button class="btn btn-primary" data-toggle="modal"
-                                                    data-target="#record_detail_{{ $record->id }}">დეტალები</button>
+                                                <td><button class="btn btn-primary edit_maps" data-toggle="modal"
+                                                    data-target="#record_detail_{{ $record->id }}" id="map_btn_{{ $record->id }}"  data-lat="{{ $record->location->lat }}" data-lng="{{ $record->location->lng }}">დეტალები</button>
                                                 </td>
                                                 <td><a href="{{ $record->image }}" target="_blank"><button class="btn btn-success">სურათი</button></a></td>
                                                 
@@ -135,10 +135,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="mb-4 detail-map">
-                                    <iframe
-                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9988.968530912382!2d44.81947456307118!3d41.69281785924005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40440d393e031453%3A0xa10cc4518e003f22!2sSheraton%20Grand%20Tbilisi%20Metechi%20Palace!5e0!3m2!1sen!2sge!4v1711963295898!5m2!1sen!2sge"
-                                        width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
-                                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                    <div id="map_btn_{{ $record->id }}_s" class="map-style edit-map"></div>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6">
@@ -347,4 +344,8 @@
             </form>
         </div>
     </div>
+
+
+    <script src="/assets/js/show-record-map.js"></script>
+
 @stop

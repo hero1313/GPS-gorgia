@@ -53,3 +53,19 @@ li{
 .filter button{
     width: 100%;
 }
+.map-style{
+    width: 100% !important;
+    height: 300px !important;
+    border-radius: 20px;
+}
+
+#map{
+    width: 100% !important;
+    height: 300px !important;
+    border-radius: 20px;
+}
+#main_map{
+    width: 100% !important;
+    height: 700px !important;
+    border-radius: 20px;
+}

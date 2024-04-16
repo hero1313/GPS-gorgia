@@ -30,16 +30,24 @@
                                         <tbody>
                                             @foreach ($records as $record)
                                                 <tr>
-                                                    <td>{{ $record->task_id }} დავალების რილეიოშენი</td>
-                                                    <td>{{ $record->location_id }} ქალაქის რილეიშენი</td>
-                                                    <td><button class="btn btn-primary" data-toggle="modal"
-                                                            data-target="#record_detail_{{ $record->id }}">დეტალები</button>
+                                                    <td>{{ $record->task->name }}</td>
+                                                    <td>{{ $record->location->name }}</td>
+                                                    <td><button class="btn btn-primary edit_maps" data-toggle="modal"
+                                                        data-target="#record_detail_{{ $record->id }}" id="map_btn_{{ $record->id }}"  data-lat="{{ $record->location->lat }}" data-lng="{{ $record->location->lng }}">დეტალები</button>
                                                     </td>
-                                                    <td><button class="btn btn-success" data-toggle="modal"
+                                                    <td>
+                                                        @if(!$record->check_in_time && $check == 0)
+                                                            <button data-lat="{{ $record->location->lat }}" data-lng="{{ $record->location->lng }}" data-radius="50" class="btn btn-success check-in" data-toggle="modal"
                                                             data-target="#record_checkin_{{ $record->id }}">ჩექინი</button>
+                                                        @endif
                                                     </td>
-                                                    <td><button class="btn btn-danger" data-toggle="modal"
+                                                    <td>
+                                                        @if($record->check_in_time && !$record->check_out_time)
+                                                        <button data-lat="{{ $record->location->lat }}" data-lng="{{ $record->location->lng }}" data-radius="50"  
+                                                            data-time="{{ Carbon\Carbon::parse($record->check_in_time)->addMinutes($record->timer)->format('Y-m-d H:i:s') }}"  
+                                                            class="btn btn-danger check-out" data-toggle="modal"
                                                             data-target="#record_checkout_{{ $record->id }}">ჩექაუთი</button>
+                                                        @endif
                                                     </td>
                                                     <td>
                                                         <button class="btn btn-primary" data-toggle="modal"
@@ -81,12 +89,7 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="mb-4 detail-map">
-                                        <iframe
-                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9988.968530912382!2d44.81947456307118!3d41.69281785924005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40440d393e031453%3A0xa10cc4518e003f22!2sSheraton%20Grand%20Tbilisi%20Metechi%20Palace!5e0!3m2!1sen!2sge!4v1711963295898!5m2!1sen!2sge"
-                                            width="100%" height="300" style="border:0;" allowfullscreen=""
-                                            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                                    </div>
+                                    <div id="map_btn_{{ $record->id }}_s" class="map-style edit-map"></div>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <li class="d-flex">
@@ -240,5 +243,92 @@
                 </div>
             </div>
         @endforeach
+        <script src="/assets/js/show-record-map.js"></script>
+
+
+        <script>
+            $(document).ready(function(){
+                function calculateDistance(lat1, lon1, lat2, lon2) {
+                    var radius = 6371000; // Earth radius in meters
+            
+                    var lat1Rad = lat1 * Math.PI / 180;
+                    var lon1Rad = lon1 * Math.PI / 180;
+                    var lat2Rad = lat2 * Math.PI / 180;
+                    var lon2Rad = lon2 * Math.PI / 180;
+            
+                    var deltaLat = lat2Rad - lat1Rad;
+                    var deltaLon = lon2Rad - lon1Rad;
+            
+                    var a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+                            Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+                            Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+                    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            
+                    var distance = radius * c;
+            
+                    return distance;
+                }
+            
+                var userLat = 41.74850286845791; // Latitude of the user's location
+                var userLon = 44.776175022125244; // Longitude of the user's location
+            
+                
+                $('.check-in').each(function() {
+                    var locationLat = parseFloat($(this).data('lat'));
+                    var locationLon = parseFloat($(this).data('lng'));
+                    var radius = parseFloat($(this).data('radius'));
+            
+                    var distance = calculateDistance(userLat, userLon, locationLat, locationLon);
+                    if (distance <= radius) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+                $('.check-out').each(function() {
+                    var locationLat = parseFloat($(this).data('lat'));
+                    var locationLon = parseFloat($(this).data('lng'));
+                    var radius = parseFloat($(this).data('radius'));
+            
+                    var distance = calculateDistance(userLat, userLon, locationLat, locationLon);
+            
+                    if (distance <= radius) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+            </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var checkoutButtons = document.querySelectorAll('.check-out');
+            checkoutButtons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    var currentTime = new Date();
+                    var checkoutTime = new Date(this.dataset.time);
+                    var hours = checkoutTime.getHours();
+                    var minutes = checkoutTime.getMinutes();
+                    var seconds = checkoutTime.getSeconds();
+
+                    var formattedTime = hours + ':' + minutes + ':' + seconds;
+                    if (checkoutTime > currentTime) {
+                        Swal.fire({
+                        title: 'ჩექაუთი ვერ შედგა',
+                        text: 'ჩექაუთი განხორციელება შეგეძლებათ ' + formattedTime + ' დროის შემდეგ',
+                        icon: 'error',
+                        confirmButtonText: 'დახურვა'
+                        })
+                        $(this).removeAttr('data-toggle');
+                    }
+                    else{
+                        $(this).attr('data-toggle', 'modal');
+                    }
+                });
+            });
+        });
+        
+    </script>
 
     @stop

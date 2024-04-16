@@ -46,11 +46,11 @@
                                     <tbody>
                                         @foreach ($locations as $location)
                                             <tr data-lat="{{ $location->lat }}" data-lng="{{ $location->lng }}"
-                                                 data-radius="{{ $location->radius }}">
+                                                data-lng="{{ $location->radius }}" data-radius="{{ $location->radius }}">
                                                 <td>{{ $location->name }}</td>
                                                 <td>{{ $location->city }}</td>
-                                                <td><button class="btn btn-primary edit_maps" id="map_btn_{{ $location->id }}" data-toggle="modal"
-                                                        data-target="#edit_location_{{ $location->id }}" data-lat="{{ $location->lat }}" data-lng="{{ $location->lng }}">რედაქტირება</button>
+                                                <td><button class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#edit_location_{{ $location->id }}">რედაქტირება</button>
                                                 </td>
                                                 <td><button class="btn btn-success" data-toggle="modal"
                                                         data-target="#detail_location_{{ $location->id }}">დეტალები</button>
@@ -68,6 +68,7 @@
                 </div>
                 <div class="col-12 col-md-6">
                     <div id="main_map" class="map-style"></div>
+
                 </div>
             </div>
         </div>
@@ -107,6 +108,20 @@
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
+                                    <label for="exampleInputEmail1">ლატ</label>
+                                    <input type="text" name="lat" value="{{ $location->lat }}" class="form-control"
+                                        value="">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">ლნგ</label>
+                                    <input type="text" name="lng" value="{{ $location->lng }}" class="form-control"
+                                        value="">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
                                     <label for="exampleInputEmail1">პასუხისმგებელი პირი</label>
                                     <input type="text" name="owner" value="{{ $location->owner }}"
                                         class="form-control" value="">
@@ -142,13 +157,15 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">მდებარეობა</label>
-                                    <div id="map_btn_{{ $location->id }}_s" class="map-style edit-map"></div>
+                                    <iframe
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25743.807174985322!2d44.7802700476656!3d41.68938444433022!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40440cc00a79a799%3A0x8accaace2cb10853!2sMtatsminda%20Park!5e0!3m2!1sen!2sge!4v1712054182759!5m2!1sen!2sge"
+                                        width="100%" height="300" style="border:0;" allowfullscreen=""
+                                        loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                                 </div>
                             </div>
-                            <input type="hidden" id="map_btn_{{ $location->id }}_lat" name='lat' class=" form-control">
-                            <input type="hidden" id="map_btn_{{ $location->id }}_lng" name='lng' class=" form-control">
                         </div>
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-primary">მდებარეობის დამახსოვრება</button>
                             <button type="submit" class="btn btn-primary">დადასტურება</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">დახურვა</button>
                         </div>
@@ -310,7 +327,7 @@
                                     type="text" placeholder="Search Box" />
                             </div>
                         </div>
-                        <div id="add_map" class="map-style"></div>
+                        <div id="map" class="map-style"></div>
 
                         <button style="opacity:0.1" type="button" id="custom_btn" class="mt-4 btn btn-primary btn-map">
                             asd
@@ -328,16 +345,4 @@
 
         </div>
     </div>
-
-
-
-    {{-- google map --}}
-
-    {{-- ეს არ მუშაობს კარგად --}}
-    <script src="/assets/js/add-location-map.js"></script>
-    <script src="/assets/js/show-location-map.js"></script>
-    <script src="/assets/js/edit-location-map.js"></script>
-
-
-
 @stop

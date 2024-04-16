@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('owner')->nullable();
             $table->string('owner_number')->nullable();
-            $table->string('radius')->nullable();
+            $table->string('radius')->default(50)->nullable();
             $table->integer('timer')->default(0)->nullable();
             $table->string('department_index')->default(1);
             $table->timestamps();

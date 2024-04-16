@@ -115,8 +115,13 @@ class RecordController extends Controller
         $locations = Location::all();
         $tasks = Task::all();
         $users = User::all();
-
-        return view('website.components.my_records', compact('records', 'locations', 'tasks', 'users'));
+        $check = 1;
+        $checkData = Record::where('assigned_user_id', Auth::user()->id)
+        ->whereNotNull('check_in_time')
+        ->whereNull('check_out_time')
+        ->get();
+        $check = $checkData->isEmpty() ? 0 : 1;
+        return view('website.components.my_records', compact('records', 'locations', 'tasks', 'users', 'check'));
     }
 
     /**
@@ -125,7 +130,9 @@ class RecordController extends Controller
     public function checkIn(Request $request, $id)
     {   
         $record = Record::find($id);
-        $record->check_in_time = $request->check_in_time;
+        $currentDateTime = Carbon::now();
+        $currentDateTime->addHours(4);
+        $record->check_in_time = $currentDateTime;
         if ($request->hasfile('image')) {
             $file = $request->file('image');
             $extention = $file->getClientOriginalExtension();
@@ -140,9 +147,11 @@ class RecordController extends Controller
 
     public function checkOut(Request $request, $id)
     {   
+        $currentDateTime = Carbon::now();
+        $currentDateTime->addHours(4);
         $record = Record::find($id);
         $record->status = $request->status;
-        $record->check_out_time = $request->check_out_time;
+        $record->check_out_time = $currentDateTime;
         $record->comment = $request->comment;
         $record->update();
         return redirect()->back();
