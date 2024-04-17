@@ -70,7 +70,7 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary " id="custom_btn" type="button">
+        {{-- <button class="btn btn-primary " id="custom_btn" type="button">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                 fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
                 <path
@@ -79,7 +79,7 @@
         </button>
         <div id="map_custom" class="map-style edit-map"></div>
         <input type="text" id="curent_lat">
-        <input type="text" id="curent_lng">
+        <input type="text" id="curent_lng"> --}}
 
         @foreach ($records as $record)
             {{-- detail --}}
