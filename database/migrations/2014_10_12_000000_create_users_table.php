@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('image', 2048)->nullable();
-            $table->string('role')->default(1);
+            $table->string('role')->default(0);
             $table->string('department_index')->default(1);
             $table->timestamps();
         });

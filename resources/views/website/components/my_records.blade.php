@@ -22,8 +22,7 @@
                                                 <th>დავალება</th>
                                                 <th>ლოკაცია</th>
                                                 <th>დეტალები</th>
-                                                <th>ჩექინი</th>
-                                                <th>ჩექაუთი</th>
+                                                <th>ჩექინი & ჩექაუთი</th>
                                                 <th>კომენტარი</th>
                                             </tr>
                                         </thead>
@@ -37,13 +36,11 @@
                                                     </td>
                                                     <td>
                                                         @if(!$record->check_in_time && $check == 0)
-                                                            <button data-lat="{{ $record->location->lat }}" data-lng="{{ $record->location->lng }}" data-radius="50" class="btn btn-success check-in" data-toggle="modal"
+                                                            <button data-lat="{{ $record->location->lat }}" data-lng="{{ $record->location->lng }}" data-radius="{{ $record->radius }}" class="btn btn-success check-in" data-toggle="modal"
                                                             data-target="#record_checkin_{{ $record->id }}">ჩექინი</button>
                                                         @endif
-                                                    </td>
-                                                    <td>
                                                         @if($record->check_in_time && !$record->check_out_time)
-                                                        <button data-lat="{{ $record->location->lat }}" data-lng="{{ $record->location->lng }}" data-radius="50"  
+                                                        <button data-lat="{{ $record->location->lat }}" data-lng="{{ $record->location->lng }}" data-radius="{{ $record->radius }}"  
                                                             data-time="{{ Carbon\Carbon::parse($record->check_in_time)->addMinutes($record->timer)->format('Y-m-d H:i:s') }}"  
                                                             class="btn btn-danger check-out" data-toggle="modal"
                                                             data-target="#record_checkout_{{ $record->id }}">ჩექაუთი</button>
@@ -73,6 +70,16 @@
                 </div>
             </div>
         </div>
+        <button class="btn btn-primary " id="custom_btn" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                <path
+                    d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+            </svg>
+        </button>
+        <div id="map_custom" class="map-style edit-map"></div>
+        <input type="text" id="curent_lat">
+        <input type="text" id="curent_lng">
 
         @foreach ($records as $record)
             {{-- detail --}}
@@ -274,6 +281,7 @@
             
                 
                 $('.check-in').each(function() {
+                    // $('#custom_btn').click()
                     var locationLat = parseFloat($(this).data('lat'));
                     var locationLon = parseFloat($(this).data('lng'));
                     var radius = parseFloat($(this).data('radius'));
@@ -298,7 +306,58 @@
                         $(this).hide();
                     }
                 });
+
+
+                // ესენი დასასრულებელია არ მუშაობს ინფუთებიდან გვიან მოდის ველიუ
+                $('.check-in').click(function() {
+                    $('#custom_btn').click()
+                    var locationLat = $(this).data('lat');
+                    var locationLon = $(this).data('lng');
+                    var radius = parseFloat($(this).data('radius'));
+                    userLat = $('#curent_lat').val()
+                    userLon = $('#curent_lng').val()
+
+                    
+                    alert($('#curent_lat').val())
+
+                    var distance = calculateDistance(userLat, userLon, locationLat, locationLon);
+                    console.log(userLat, userLon, locationLat, locationLon)
+                    if (distance > radius) {
+                            Swal.fire({
+                            title: 'ჩექინი ვერ შედგა',
+                            text: 'ჩექინი განხორციელება შეგეძლებათ ობიექტის ტერიტორიაზე',
+                            icon: 'error',
+                            confirmButtonText: 'დახურვა'
+                            })
+                            $(this).removeAttr('data-toggle');  
+                    }
+
+                })
+
+                $('.check-out').click(function() {
+                    $('#custom_btn').click()
+                    var locationLat = parseFloat($(this).data('lat'));
+                    var locationLon = parseFloat($(this).data('lng'));
+                    var radius = parseFloat($(this).data('radius'));
+                    var userLat = 41.7497088
+                    var userLon = 44.7840256
+
+
+                    var distance = calculateDistance(userLat, userLon, locationLat, locationLon);
+                    if (distance > radius) {
+                            Swal.fire({
+                            title: 'ჩექაუთი ვერ შედგა',
+                            text: 'ჩექაუთი განხორციელება შეგეძლებათ ობიექტის ტერიტორიაზე',
+                            icon: 'error',
+                            confirmButtonText: 'დახურვა'
+                            })
+                            $(this).removeAttr('data-toggle');  
+                    }
+                })
             });
+                
+
+            
             </script>
 
     <script>

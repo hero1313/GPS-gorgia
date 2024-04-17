@@ -98,3 +98,43 @@ $(function() {
     initMap(lat, lng);
 })
 });
+
+var map, marker, infowindow, geocoder;
+
+function curentLocation() {
+    map = new google.maps.Map(document.getElementById('map_custom'));
+    const locationButton = document.getElementById('custom_btn');
+
+    locationButton.addEventListener("click", () => {
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+                    console.log(pos.lat)
+                    $('#curent_lat').val(pos.lat);
+                    $('#curent_lng').val(pos.lng);
+                }
+            );
+        }
+    });
+
+    geocoder = new google.maps.Geocoder();
+}
+
+$(function () {
+
+    curentLocation();
+
+
+    $(document).on('keyup keypress keydown', '#pac-input', function (e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+})

@@ -49,13 +49,17 @@ class RecordController extends Controller
      */
     public function store(Request $request)
     {
+        $today = Carbon::now();
         $location = Location::find($request->location_id);
         $task = Task::find($request->task_id);
         $record = new Record();
         $record->location_id = $request->location_id;
         $record->task_id = $request->task_id;
         $record->assigned_user_id = $request->assigned_user_id;
-        $record->date = $request->date;
+        $record->date = $today;
+        if(isset($request->date)){
+            $record->date = $request->date;
+        }
         if(isset($task->description)){
             $record->description = $task->description;
         }
@@ -111,6 +115,7 @@ class RecordController extends Controller
 
     public function myRecords ()
     {
+        if(Auth::user()->role != 0){
         $records = Record::where('assigned_user_id', Auth::user()->id)->get();
         $locations = Location::all();
         $tasks = Task::all();
@@ -122,6 +127,9 @@ class RecordController extends Controller
         ->get();
         $check = $checkData->isEmpty() ? 0 : 1;
         return view('website.components.my_records', compact('records', 'locations', 'tasks', 'users', 'check'));
+        }else{
+            
+        }
     }
 
     /**
