@@ -12,12 +12,12 @@
     <hr class="my-0 sidebar-divider">
 
     <!-- Nav Item - Dashboard -->
+    @if(Auth::user()->role == 2)
     <li class="nav-item active">
         <a class="nav-link" href="{{ route('dashboard.index') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>დეშბორდი</span></a>
     </li>
-
     <li class="nav-item">
         <a class="nav-link collapsed" href="{{ route('locations.index') }}" data-target="#collapseUtilities"
             aria-expanded="true" aria-controls="collapseUtilities">
@@ -54,6 +54,7 @@
             </svg>
         </a>
     </li>
+    @else
     <li class="nav-item">
         <a class="nav-link collapsed" href="{{ route('my.records.index') }}" data-target="#collapseUtilities"
             aria-expanded="true" aria-controls="collapseUtilities">
@@ -63,7 +64,7 @@
             </svg>
         </a>
     </li>
-
+    @endif
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

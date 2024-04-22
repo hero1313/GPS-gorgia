@@ -147,7 +147,7 @@
                                     <h5 class="mr-3">შემსრულებელი :</h5>
                                     <p>{{ $record->user->name }}</p>
                                 </li>
-                                <li class="d-flex">
+                                <li class="m5-2 d-flex">
                                     <h5 class="mr-3">თარიღი :</h5>
                                     <p>{{ $record->date }}</p>
                                 </li>
@@ -163,16 +163,22 @@
                                     <p>{{ $record->radius }} მეტრი</p>
                                 </li>
                                 <li class="d-flex">
+                                    <h5 class="mr-3">სტატუსი :</h5>
+                                    <p>@if($record->status == 0)
+                                        დაგეგმილი
+                                    @elseif ($record->status == 1)
+                                        დასრულებული
+                                    @else
+                                        ჩაშლილი
+                                    @endif</p>
+                                </li>
+                                <li class="d-flex">
                                     <h5 class="mr-3">ჩექინი :</h5>
-                                    <p>{{ $record->check_in_time }}</p>
+                                    <p>{{ $record->check_in_time ?? 'არ შემდგარა' }}</p>
                                 </li>
                                 <li class="d-flex">
                                     <h5 class="mr-3">ჩექაუთი :</h5>
-                                    <p>{{ $record->check_out_time }}</p>
-                                </li>
-                                <li class="d-flex">
-                                    <h5 class="mr-3">სტატუსი :</h5>
-                                    <p>{{ $record->status }}</p>
+                                    <p>{{ $record->check_out_time ?? 'არ შემდგარა' }}</p>
                                 </li>
                             </div>
                             <div class="col-12 detail-line">
@@ -180,10 +186,12 @@
                                     <h5 class="mr-3">დავალება :</h5>
                                     <p>{{ $record->task->name }}</p>
                                 </li>
+                                @if($record->comment)
                                 <li class="d-flex">
                                     <h5 class="mr-3">კომენტარი :</h5>
                                     <p>{{ $record->comment }}</p>
                                 </li>
+                                @endif
                             </div>
                         </div>
                     </div>

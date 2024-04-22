@@ -77,3 +77,27 @@ li{
 .check-in, .check-out{
     display: none;
 }
+
+.center{
+    text-align: center;
+}
+#userDropdown{
+    display: none;
+}
+@media only screen and (max-width: 800px) {
+    .my-card{
+        padding: 0px;
+    }
+    .sidebar {
+        width: 0px !important;
+    }
+    .fa-laugh-wink{
+        display: none !important;
+    }
+    .my-card th{
+        font-size: 12px;
+    }
+    .my-card td{
+        font-size: 12px;
+    }
+  }

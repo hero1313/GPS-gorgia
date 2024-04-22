@@ -115,7 +115,9 @@ class RecordController extends Controller
 
     public function myRecords ()
     {
-        $records = Record::where('assigned_user_id', Auth::user()->id)->get();
+        $today = Carbon::today();
+
+        $records = Record::where('assigned_user_id', Auth::user()->id)->whereDate('date', $today)->get();
         $locations = Location::all();
         $tasks = Task::all();
         $users = User::all();

@@ -6,62 +6,87 @@
         <!-- Main Content -->
         <div id="content">
             @include('website.layouts.navbar')
-            <div class="mb-3 container-fluid">
+            <div class="mb-3 container-fluid ">
                 <div class="row">
                     <div class="col-12">
-                        <button class="mb-4 btn btn-primary" id="custom_btn">  ლოკაციის განახლების დრო : <span id="countdown-display">10</span> წმ</button>
+                        <button class="mb-4 btn btn-primary" id="custom_btn"> ლოკაციის განახლების დრო : <span
+                                id="countdown-display">10</span> წმ</button>
 
                         <div class="mb-4 shadow card">
                             <div class="py-3 card-header">
                                 <h6 class="m-0 font-weight-bold text-primary">ჩექინები</h6>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body my-card">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>დავალება</th>
-                                                <th>ლოკაცია</th>
-                                                <th>დეტალები</th>
-                                                <th>ჩექინი & ჩექაუთი</th>
-                                                <th>კომენტარი</th>
-                                            </tr>
-                                        </thead>
+                                        
                                         <tbody>
-                                            @foreach ($records as $record)
+                                            @if ($records->isEmpty())
+                                                <p class="mt-5 center">დღევანდელი ჩექინები არ მოიძებნა</p>
+                                            @else
+                                            <thead>
                                                 <tr>
-                                                    <td>{{ $record->task->name }}</td>
-                                                    <td>{{ $record->location->name }}</td>
-                                                    <td><button class="btn btn-primary edit_maps" data-toggle="modal"
-                                                        data-target="#record_detail_{{ $record->id }}" id="map_btn_{{ $record->id }}"  data-lat="{{ $record->location->lat }}" data-lng="{{ $record->location->lng }}">დეტალები</button>
-                                                    </td>
-                                                    <td>
-                                                        @if(!$record->check_in_time && $check == 0)
-                                                            <button data-lat="{{ $record->location->lat }}" data-lng="{{ $record->location->lng }}" data-radius="{{ $record->radius }}" class="btn btn-success check-in" data-toggle="modal"
-                                                            data-target="#record_checkin_{{ $record->id }}">ჩექინი</button>
-                                                        @endif
-                                                        @if($record->check_in_time && !$record->check_out_time)
-                                                        <button data-lat="{{ $record->location->lat }}" data-lng="{{ $record->location->lng }}" data-radius="{{ $record->radius }}"  
-                                                            data-time="{{ Carbon\Carbon::parse($record->check_in_time)->addMinutes($record->timer)->format('Y-m-d H:i:s') }}"  
-                                                            class="btn btn-danger check-out" data-toggle="modal"
-                                                            data-target="#record_checkout_{{ $record->id }}">ჩექაუთი</button>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-primary" data-toggle="modal"
-                                                            data-target="#record_comment_{{ $record->id }}">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="26"
-                                                                height="26" fill="currentColor" class="bi bi-chat-dots"
-                                                                viewBox="0 0 16 16">
-                                                                <path
-                                                                    d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
-                                                                <path
-                                                                    d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9 9 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.4 10.4 0 0 1-.524 2.318l-.003.011a11 11 0 0 1-.244.637c-.079.186.074.394.273.362a22 22 0 0 0 .693-.125m.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6-3.004 6-7 6a8 8 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a11 11 0 0 0 .398-2" />
-                                                            </svg>
-                                                        </button>
-                                                    </td>
+                                                    <th>დავალება</th>
+                                                    <th>ლოკაცია</th>
+                                                    <th>ჩექინი & ჩექაუთი</th>
+                                                    <th>სტატუსი</th>
+                                                    <th>დეტალები</th>
+                                                    <th>კომენტარი</th>
                                                 </tr>
-                                            @endforeach
+                                            </thead>
+                                                @foreach ($records as $record)
+                                                    <tr>
+                                                        <td>{{ $record->task->name }}</td>
+                                                        <td>{{ $record->location->name }}</td>
+                                                        <td>
+                                                            @if (!$record->check_in_time && $check == 0)
+                                                                <button data-lat="{{ $record->location->lat }}"
+                                                                    data-lng="{{ $record->location->lng }}"
+                                                                    data-radius="{{ $record->radius }}"
+                                                                    class="btn btn-success check-in" data-toggle="modal"
+                                                                    data-target="#record_checkin_{{ $record->id }}">ჩექინი</button>
+                                                            @endif
+                                                            @if ($record->check_in_time && !$record->check_out_time)
+                                                                <button data-lat="{{ $record->location->lat }}"
+                                                                    data-lng="{{ $record->location->lng }}"
+                                                                    data-radius="{{ $record->radius }}"
+                                                                    data-time="{{ Carbon\Carbon::parse($record->check_in_time)->addMinutes($record->timer)->format('Y-m-d H:i:s') }}"
+                                                                    class="btn btn-danger check-out" data-toggle="modal"
+                                                                    data-target="#record_checkout_{{ $record->id }}">ჩექაუთი</button>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if ($record->status == 0)
+                                                                <button class="btn btn-info">დაგეგმილი</button>
+                                                            @elseif ($record->status == 1)
+                                                                <button class="btn btn-success">დასრულებული</button>
+                                                            @else
+                                                                <button class="btn btn-danger">ჩაშლილი</button>
+                                                            @endif
+                                                        </td>
+                                                        <td><button class="btn btn-primary edit_maps" data-toggle="modal"
+                                                                data-target="#record_detail_{{ $record->id }}"
+                                                                id="map_btn_{{ $record->id }}"
+                                                                data-lat="{{ $record->location->lat }}"
+                                                                data-lng="{{ $record->location->lng }}">დეტალები</button>
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-dark" data-toggle="modal"
+                                                                data-target="#record_comment_{{ $record->id }}">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="26"
+                                                                    height="26" fill="currentColor"
+                                                                    class="bi bi-chat-dots" viewBox="0 0 16 16">
+                                                                    <path
+                                                                        d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
+                                                                    <path
+                                                                        d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9 9 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.4 10.4 0 0 1-.524 2.318l-.003.011a11 11 0 0 1-.244.637c-.079.186.074.394.273.362a22 22 0 0 0 .693-.125m.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6-3.004 6-7 6a8 8 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a11 11 0 0 0 .398-2" />
+                                                                </svg>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+
                                         </tbody>
                                     </table>
                                 </div>
