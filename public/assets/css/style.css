@@ -73,3 +73,7 @@ li{
     width: 1px !important;
     height: 1px !important;
 }
+
+.check-in, .check-out{
+    display: none;
+}

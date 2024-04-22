@@ -21,9 +21,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
 
+    Route::get('/', [MainController::class, 'redirect']);
+
+
     Route::middleware('admin')->group(function () {
         // Locations Routes
-        Route::get('/', [LocationController::class, 'index'])->name('locations.index');
         Route::get('/locations', [LocationController::class, 'index'])->name('locations.index');
         Route::post('/locations/store', [LocationController::class, 'store'])->name('locations.store');
         Route::put('/locations/{id}/update', [LocationController::class, 'update'])->name('locations.update');
@@ -49,7 +51,6 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     });
 
     Route::middleware('presaler')->group(function () {
-        Route::get('/', [RecordController::class, 'myRecords'])->name('my.records.index');
         Route::get('/my-records', [RecordController::class, 'myRecords'])->name('my.records.index');
         Route::put('/records/{id}/checkin', [RecordController::class, 'checkIn'])->name('checkin.records.update');
         Route::put('/records/{id}/checkout', [RecordController::class, 'checkOut'])->name('checkout.records.update');

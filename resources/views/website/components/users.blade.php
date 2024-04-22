@@ -35,7 +35,7 @@
                                                     <td><button
                                                             class="btn btn-success">{{ $user->department_index == 1 ? 'დისტრიბუცია' : ($user->department_index == 2 ? 'კორპორატიული გაყიდვები' : '') }}</button>
                                                     </td>
-                                                    <td><button class="btn btn-success">{{ $user->role == 1 ? 'ადმინი' : ($user->role == 2 ? 'პრისელერი' : '') }}</button></td>
+                                                    <td><button class="btn btn-success">{{ $user->role == 2 ? 'ადმინი' : ($user->role == 1 ? 'პრისელერი' : '') }}</button></td>
                                                     <td><button class="btn btn-primary" data-toggle="modal"
                                                             data-target="#edit_user_{{ $user->id }}">რედაქტირება</button>
                                                     </td>
@@ -73,9 +73,9 @@
                             <div class="form-group">
                                 <label for="inputState">როლი</label>
                                 <select id="inputState" name="role" class="form-control">
-                                    <option value="{{ $user->role }}">{{ $user->role == 1 ? 'ადმინი' : ($user->role == 2 ? 'პრისელერი' : '') }}</option>
-                                    <option value="1">ადმინი</option>
-                                    <option value="2">პრისელერი</option>
+                                    <option value="{{ $user->role }}">{{ $user->role == 2 ? 'ადმინი' : ($user->role == 1 ? 'პრისელერი' : '') }}</option>
+                                    <option value="2">ადმინი</option>
+                                    <option value="1">პრისელერი</option>
                                 </select>
                             </div>
                             </div>

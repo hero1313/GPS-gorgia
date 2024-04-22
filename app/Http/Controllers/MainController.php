@@ -59,4 +59,17 @@ class MainController extends Controller
         $user->delete();
         return redirect()->back();
     }
+    public function redirect()
+    {   
+        $role = Auth::user()->role ;
+        if($role == 2){
+            return redirect('/locations');
+        }
+        else if($role == 1){
+            return redirect('/my-records');
+        }
+        else{
+            return redirect('/my-records');
+        }
+    }
 }

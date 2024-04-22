@@ -115,7 +115,6 @@ class RecordController extends Controller
 
     public function myRecords ()
     {
-        if(Auth::user()->role != 0){
         $records = Record::where('assigned_user_id', Auth::user()->id)->get();
         $locations = Location::all();
         $tasks = Task::all();
@@ -127,9 +126,7 @@ class RecordController extends Controller
         ->get();
         $check = $checkData->isEmpty() ? 0 : 1;
         return view('website.components.my_records', compact('records', 'locations', 'tasks', 'users', 'check'));
-        }else{
-            
-        }
+
     }
 
     /**
