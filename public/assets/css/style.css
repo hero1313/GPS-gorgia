@@ -69,3 +69,7 @@ li{
     height: 700px !important;
     border-radius: 20px;
 }
+.hidden-map{
+    width: 1px !important;
+    height: 1px !important;
+}

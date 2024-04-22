@@ -5,14 +5,15 @@
 
         <!-- Main Content -->
         <div id="content">
-
             @include('website.layouts.navbar')
             <div class="mb-3 container-fluid">
                 <div class="row">
                     <div class="col-12">
+                        <button class="mb-4 btn btn-primary" id="custom_btn">  ლოკაციის განახლების დრო : <span id="countdown-display">10</span> წმ</button>
+
                         <div class="mb-4 shadow card">
                             <div class="py-3 card-header">
-                                <h6 class="m-0 font-weight-bold text-primary">იუზერები</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">ჩექინები</h6>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -70,16 +71,9 @@
                 </div>
             </div>
         </div>
-        {{-- <button class="btn btn-primary " id="custom_btn" type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                <path
-                    d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
-            </svg>
-        </button>
-        <div id="map_custom" class="map-style edit-map"></div>
-        <input type="text" id="curent_lat">
-        <input type="text" id="curent_lng"> --}}
+        <div id="map_custom" class="map-style edit-map hidden-map"></div>
+        <input type="hidden" id="curent_lat">
+        <input type="hidden" id="curent_lng">
 
         @foreach ($records as $record)
             {{-- detail --}}
@@ -251,143 +245,4 @@
             </div>
         @endforeach
         <script src="/assets/js/show-record-map.js"></script>
-
-
-        <script>
-            $(document).ready(function(){
-                function calculateDistance(lat1, lon1, lat2, lon2) {
-                    var radius = 6371000; // Earth radius in meters
-            
-                    var lat1Rad = lat1 * Math.PI / 180;
-                    var lon1Rad = lon1 * Math.PI / 180;
-                    var lat2Rad = lat2 * Math.PI / 180;
-                    var lon2Rad = lon2 * Math.PI / 180;
-            
-                    var deltaLat = lat2Rad - lat1Rad;
-                    var deltaLon = lon2Rad - lon1Rad;
-            
-                    var a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-                            Math.cos(lat1Rad) * Math.cos(lat2Rad) *
-                            Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
-                    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            
-                    var distance = radius * c;
-            
-                    return distance;
-                }
-            
-                var userLat = 41.74850286845791; // Latitude of the user's location
-                var userLon = 44.776175022125244; // Longitude of the user's location
-            
-                
-                $('.check-in').each(function() {
-                    // $('#custom_btn').click()
-                    var locationLat = parseFloat($(this).data('lat'));
-                    var locationLon = parseFloat($(this).data('lng'));
-                    var radius = parseFloat($(this).data('radius'));
-            
-                    var distance = calculateDistance(userLat, userLon, locationLat, locationLon);
-                    if (distance <= radius) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
-                $('.check-out').each(function() {
-                    var locationLat = parseFloat($(this).data('lat'));
-                    var locationLon = parseFloat($(this).data('lng'));
-                    var radius = parseFloat($(this).data('radius'));
-            
-                    var distance = calculateDistance(userLat, userLon, locationLat, locationLon);
-            
-                    if (distance <= radius) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
-
-
-                // ესენი დასასრულებელია არ მუშაობს ინფუთებიდან გვიან მოდის ველიუ
-                $('.check-in').click(function() {
-                    $('#custom_btn').click()
-                    var locationLat = $(this).data('lat');
-                    var locationLon = $(this).data('lng');
-                    var radius = parseFloat($(this).data('radius'));
-                    userLat = $('#curent_lat').val()
-                    userLon = $('#curent_lng').val()
-
-                    
-                    alert($('#curent_lat').val())
-
-                    var distance = calculateDistance(userLat, userLon, locationLat, locationLon);
-                    console.log(userLat, userLon, locationLat, locationLon)
-                    if (distance > radius) {
-                            Swal.fire({
-                            title: 'ჩექინი ვერ შედგა',
-                            text: 'ჩექინი განხორციელება შეგეძლებათ ობიექტის ტერიტორიაზე',
-                            icon: 'error',
-                            confirmButtonText: 'დახურვა'
-                            })
-                            $(this).removeAttr('data-toggle');  
-                    }
-
-                })
-
-                $('.check-out').click(function() {
-                    $('#custom_btn').click()
-                    var locationLat = parseFloat($(this).data('lat'));
-                    var locationLon = parseFloat($(this).data('lng'));
-                    var radius = parseFloat($(this).data('radius'));
-                    var userLat = 41.7497088
-                    var userLon = 44.7840256
-
-
-                    var distance = calculateDistance(userLat, userLon, locationLat, locationLon);
-                    if (distance > radius) {
-                            Swal.fire({
-                            title: 'ჩექაუთი ვერ შედგა',
-                            text: 'ჩექაუთი განხორციელება შეგეძლებათ ობიექტის ტერიტორიაზე',
-                            icon: 'error',
-                            confirmButtonText: 'დახურვა'
-                            })
-                            $(this).removeAttr('data-toggle');  
-                    }
-                })
-            });
-                
-
-            
-            </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var checkoutButtons = document.querySelectorAll('.check-out');
-            checkoutButtons.forEach(function(button) {
-                button.addEventListener('click', function(event) {
-                    var currentTime = new Date();
-                    var checkoutTime = new Date(this.dataset.time);
-                    var hours = checkoutTime.getHours();
-                    var minutes = checkoutTime.getMinutes();
-                    var seconds = checkoutTime.getSeconds();
-
-                    var formattedTime = hours + ':' + minutes + ':' + seconds;
-                    if (checkoutTime > currentTime) {
-                        Swal.fire({
-                        title: 'ჩექაუთი ვერ შედგა',
-                        text: 'ჩექაუთი განხორციელება შეგეძლებათ ' + formattedTime + ' დროის შემდეგ',
-                        icon: 'error',
-                        confirmButtonText: 'დახურვა'
-                        })
-                        $(this).removeAttr('data-toggle');
-                    }
-                    else{
-                        $(this).attr('data-toggle', 'modal');
-                    }
-                });
-            });
-        });
-        
-    </script>
-
     @stop
