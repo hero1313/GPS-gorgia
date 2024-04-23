@@ -8,7 +8,7 @@
 
             @include('website.layouts.navbar')
             <div class="mb-3 container-fluid">
-                <form method="get" action="{{ route('records.index') }}"
+                <form method="get" id="record_form" action="{{ route('records.index') }}"
                     class="my-2 navbar-search">
                     <div class="row filter">
                         <div class="col-12 col-md-2 input-group">
@@ -44,13 +44,13 @@
                             </select>
                         </div>
                         <div class="col-12 col-md-2 input-group">
-                            <button type="submit" class="btn btn-primary ">გაფილტვრა</button>
+                            <button type="submit" id="filter_button" class="btn btn-primary ">გაფილტვრა</button>
                         </div>
                     </div>
                     
                 <div class="d-flex">
                     <button class="btn btn-primary add-btn" type="button" data-toggle="modal" data-target="#add_record">დამატება</button>
-                    <button class="ml-4 btn btn-success add-btn" data-toggle="modal" data-target="#add_record">ექსელის ექსპორტი</button>
+                    <button class="ml-4 btn btn-success add-btn" id="excel_export">ექსელის ექსპორტი</button>
                 </div>
             </form>
 
@@ -82,9 +82,9 @@
                                     <tbody>
                                         @foreach ($records as $record)
                                             <tr>
-                                                <td>{{ $record->user->name }}</td>
-                                                <td>{{ $record->task->name}}</td>
-                                                <td>{{ $record->location->name }}</td>
+                                                <td>{{ $record->user ? $record->user->name : '' }}</td>
+                                                <td>{{ $record->task ? $record->task->name : '' }}</td>
+                                                <td>{{ $record->location ? $record->location->name : '' }}</td>
                                                 <td>{{ $record->date }}</td>
                                                 <td><button class="btn btn-primary edit_maps" data-toggle="modal"
                                                     data-target="#record_detail_{{ $record->id }}" id="map_btn_{{ $record->id }}"  data-lat="{{ $record->location->lat }}" data-lng="{{ $record->location->lng }}">დეტალები</button>
@@ -145,7 +145,7 @@
                                 </li>
                                 <li class="d-flex">
                                     <h5 class="mr-3">შემსრულებელი :</h5>
-                                    <p>{{ $record->user->name }}</p>
+                                    <p>{{ $record->user ? $record->user->name : '' }}</p>
                                 </li>
                                 <li class="m5-2 d-flex">
                                     <h5 class="mr-3">თარიღი :</h5>
@@ -155,9 +155,20 @@
                                     <h5 class="mr-3">შეზღუდვის დრო :</h5>
                                     <p>{{ $record->timer }}წთ</p>
                                 </li>
-
+                                <li class="d-flex">
+                                    <h5 class="mr-3">პას.პირის სახელი :</h5>
+                                    <p>{{ $record->responsible_name }} </p>
+                                </li>
+                                <li class="d-flex">
+                                    <h5 class="mr-3">პას.პირის პოზიცია :</h5>
+                                    <p>{{ $record->position }} </p>
+                                </li>
                             </div>
                             <div class="col-12 col-md-6">
+                                <li class="d-flex">
+                                    <h5 class="mr-3">პას.პირის ნომერი :</h5>
+                                    <p>{{ $record->number }} </p>
+                                </li>
                                 <li class="d-flex">
                                     <h5 class="mr-3">რადიუსი :</h5>
                                     <p>{{ $record->radius }} მეტრი</p>
@@ -184,7 +195,7 @@
                             <div class="col-12 detail-line">
                                 <li class="d-flex">
                                     <h5 class="mr-3">დავალება :</h5>
-                                    <p>{{ $record->task->name }}</p>
+                                    <p>{{ $record->task ? $record->task->name : '' }}</p>
                                 </li>
                                 @if($record->comment)
                                 <li class="d-flex">
@@ -221,7 +232,7 @@
                                 <div class="form-group">
                                     <label for="inputState">შემსრულებელი</label>
                                     <select id="inputState" name="assigned_user_id" required class="form-control">
-                                        <option value="{{ $record->assigned_user_id }}">{{ $record->user->name }}
+                                        <option value="{{ $record->assigned_user_id }}">{{ $record->user ? $record->user->name : '' }}
                                         </option>
                                         @foreach ($users as $user)
                                             <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -233,7 +244,7 @@
                                 <div class="form-group">
                                     <label for="inputState">დავალება</label>
                                     <select id="inputState" name="task_id" class="form-control">
-                                        <option value="{{ $record->task_id }}">{{ $record->task->name }}</option>
+                                        <option value="{{ $record->task_id }}">{{ $record->task ? $record->task->name : '' }}</option>
                                         @foreach ($tasks as $task)
                                             <option value="{{ $task->id }}">{{ $task->name }}</option>
                                         @endforeach
@@ -244,7 +255,7 @@
                                 <div class="form-group">
                                     <label for="inputState">ლოკაცია</label>
                                     <select id="inputState" name="location_id" class="form-control">
-                                        <option value="{{ $record->location_id }}">{{ $record->location->name }}</option>
+                                        <option value="{{ $record->location_id }}">{{ $record->location ? $record->location->name : '' }}</option>
                                         @foreach ($locations as $location)
                                             <option value="{{ $location->id }}">{{ $location->name }}</option>
                                         @endforeach
@@ -355,5 +366,23 @@
 
 
     <script src="/assets/js/show-record-map.js"></script>
-
+    <script>
+        document.getElementById("excel_export").addEventListener("click", function() {
+            var hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "excel";
+            hiddenInput.id = "excel_input";
+            hiddenInput.value = "1";
+            document.getElementById("record_form").appendChild(hiddenInput);
+            document.getElementById("record_form").submit();
+            // document.getElementById("record_form").removeChild(hiddenInput);
+        });
+    
+        document.getElementById("filter_button").addEventListener("click", function() {
+            var excelInput = document.getElementById("excel_input");
+            if (excelInput) {
+                excelInput.parentNode.removeChild(excelInput);
+            }
+        });
+    </script>
 @stop

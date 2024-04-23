@@ -23,6 +23,9 @@ return new class extends Migration
             $table->string('radius')->nullable();
             $table->integer('timer')->default(0)->nullable();
             $table->integer('status')->default(0);
+            $table->integer('number')->nullable();
+            $table->string('position')->nullable();
+            $table->string('name')->nullable();
             $table->string('image')->nullable();
             $table->string('department_index')->default(1);
             $table->dateTime('check_in_time')->nullable();

@@ -102,6 +102,12 @@
                                     <select id="inputState" name="city" value="{{ $location->city }}"
                                         class="form-control">
                                         <option value="თბილისი">თბილისი</option>
+                                        <option value="გორი">გორი</option>
+                                        <option value="ქუთაისი">ქუთაისი</option>
+                                        <option value="ბათუმი">ბათუმი</option>
+                                        <option value="რუსთავი">რუსთავი</option>
+                                        <option value="ხაშური">ხაშური</option>
+
                                     </select>
                                 </div>
                             </div>
@@ -119,13 +125,16 @@
                                         class="form-control" value="">
                                 </div>
                             </div>
+                            @if(Auth::user()->department_index == 2)
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">რადიუსის შეზღუდვა (მეტრებში)</label>
-                                    <input type="number" name="radius" value="{{ $location->radius }}"
+                                    <label for="exampleInputEmail1">მანძილის შეზღუდვა (მეტრებში)</label>
+                                    <input type="number" name="radius" required value="{{ $location->radius }}"
                                         class="form-control" value="">
                                 </div>
                             </div>
+                            @endif
+                            @if(Auth::user()->department_index == 1)
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">დროის შეზღუდვა (წუთებში)</label>
@@ -133,6 +142,7 @@
                                         class="form-control" value="">
                                 </div>
                             </div>
+                            @endif
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">აღწერა</label>
@@ -270,6 +280,11 @@
                                 <label for="inputState">ქალაქი</label>
                                 <select id="inputState" name="city" class="form-control">
                                     <option value="თბილისი">თბილისი</option>
+                                    <option value="გორი">გორი</option>
+                                    <option value="ქუთაისი">ქუთაისი</option>
+                                    <option value="ბათუმი">ბათუმი</option>
+                                    <option value="რუსთავი">რუსთავი</option>
+                                    <option value="ხაშური">ხაშური</option>
                                 </select>
                             </div>
                         </div>
@@ -285,18 +300,22 @@
                                 <input type="number" name="owner_number" class="form-control" value="">
                             </div>
                         </div>
+                        @if(Auth::user()->department_index == 2)
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">რადიუსის შეზღუდვა (მეტრებში)</label>
-                                <input type="number" name="radius" class="form-control" value="">
+                                <label for="exampleInputEmail1">მანძილის შეზღუდვა (მეტრებში)</label>
+                                <input type="number" name="radius" required class="form-control" value="">
                             </div>
                         </div>
+                        @endif
+                        @if(Auth::user()->department_index == 1)
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">დროის შეზღუდვა (წუთებში)</label>
                                 <input type="number" name="timer" class="form-control" value="">
                             </div>
                         </div>
+                        @endif
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">აღწერა</label>
@@ -312,14 +331,14 @@
                         </div>
                         <div id="add_map" class="map-style"></div>
 
-                        <button style="opacity:0.1" type="button" id="custom_btn" class="mt-4 btn btn-primary btn-map">
+                        <button style="opacity:0.01" type="button" id="custom_btn" class="mt-4 btn btn-primary btn-map">
                             asd
                         </button>
                         <input type="hidden" id="lat" name='lat' class=" form-control">
                         <input type="hidden" id="lng" name='lng' class=" form-control">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-map">მდებარეობის დამახსოვრება</button>
+                        {{-- <button type="button" class="btn btn-primary btn-map">მდებარეობის დამახსოვრება</button> --}}
                         <button type="submit" class="btn btn-primary">დადასტურება</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">დახურვა</button>
                     </div>

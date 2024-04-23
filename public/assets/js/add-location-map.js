@@ -29,6 +29,8 @@ function initMapr() {
         var lng = e.latLng.lng();
         addLocMap.panTo(new google.maps.LatLng(lat, lng));
         setPlaceOnaddLocMap(lat, lng);
+        $('#lat').val(lat);
+        $('#lng').val(lng);
     });
 
 }

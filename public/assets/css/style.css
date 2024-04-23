@@ -84,7 +84,23 @@ li{
 #userDropdown{
     display: none;
 }
-@media only screen and (max-width: 800px) {
+.btn-comment{
+    margin-left: auto;
+}
+.text-xl{
+    font-size: 17px;
+    padding-top: 5px;
+}
+.card-btn .btn{
+    margin-top: 30px;
+    font-size: 18px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+@media only screen and (max-width: 1300px) {
+    .card-row{
+        padding: 0 5%;
+    }
     .my-card{
         padding: 0px;
     }
@@ -99,5 +115,11 @@ li{
     }
     .my-card td{
         font-size: 12px;
+    }
+    .cont{
+        padding: 0px !important;
+    }
+    .cont .btn{
+        font-size: 12px !important;
     }
   }
