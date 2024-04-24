@@ -153,13 +153,25 @@ class RecordController extends Controller
         $record->position = $request->position;
         $record->responsible_name = $request->responsible_name;
 
-        if ($request->hasfile('image')) {
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $extention = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extention;
+            $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->move('assets/image/', $filename);
-            $record->image = "assets/image/" . "$filename";
+
+            list($width, $height) = getimagesize('assets/image/' . $filename);
+            $newWidth = 850;
+            $newHeight = ($height / $width) * $newWidth;
+            $newImage = imagecreatetruecolor($newWidth, $newHeight);
+            imagecopyresampled($newImage, imagecreatefromstring(file_get_contents('assets/image/' . $filename)), 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+            $saveFunction = 'image' . (pathinfo('assets/image/' . $filename, PATHINFO_EXTENSION) == 'jpg' ? 'jpeg' : pathinfo('assets/image/' . $filename, PATHINFO_EXTENSION));
+            $saveFunction($newImage, 'assets/image/' . $filename);
+
+            imagedestroy($newImage);
+
+            $record->image = '/assets/image/' . $filename;
         }
+        // dd($request->hasfile('image'));
         $record->update();
         return redirect()->back();
     }

@@ -89,7 +89,11 @@
                                                 <td><button class="btn btn-primary edit_maps" data-toggle="modal"
                                                     data-target="#record_detail_{{ $record->id }}" id="map_btn_{{ $record->id }}"  data-lat="{{ $record->location->lat }}" data-lng="{{ $record->location->lng }}">დეტალები</button>
                                                 </td>
-                                                <td><a href="{{ $record->image }}" target="_blank"><button class="btn btn-success">სურათი</button></a></td>
+                                                <td>
+                                                    @if($record->image)
+                                                    <a href="{{ $record->image }}" target="_blank"><button class="btn btn-success">სურათი</button></a>
+                                                    @endif
+                                                </td>
                                                 
                                                 <td><button class="btn btn-success">
                                                 @if($record->status == 0)
